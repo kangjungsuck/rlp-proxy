@@ -16,14 +16,13 @@ jobs:
       # Github Repository Secrets를 통해 환경 변수 파일을 생성합니다.
       - name: Generate Environment Variables File for Production
         run: |
-          echo "SUPABASE_KEY=$SUPABASE_KEY" >> .env.production
-          echo "SERVER_URL=$SERVER_URL" >> .env.production
+          echo "SUPABASE_KEY=$SUPABASE_KEY" >> .env
+          echo "SERVER_URL=$SERVER_URL" >> .env
         env:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           SERVER_URL: ${{ secrets.SERVER_URL }}
 
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        run:
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'allallallnft-rlp-proxy' #Must be unique in Heroku
