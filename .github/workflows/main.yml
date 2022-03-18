@@ -10,20 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      # Github Repository Secrets를 통해 환경 변수 파일을 생성합니다.
-      - name: Generate Environment Variables File for Production
-        run: |
-          echo "SUPABASE_KEY=$SUPABASE_KEY" >> .env
-          echo "SERVER_URL=$SERVER_URL" >> .env
-        env:
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          SERVER_URL: ${{ secrets.SERVER_URL }}
-
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'allallallnft-rlp-proxy' #Must be unique in Heroku
           heroku_email: 'jungsuck@pack.systems'
+        env:
+          HD_SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          HD_SERVER_URL: ${{ secrets.SERVER_URL }}
