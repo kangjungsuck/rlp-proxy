@@ -1,7 +1,7 @@
 require('dotenv').config();
 import express, { Response } from 'express';
 import { getMetadata } from './lib';
-import { checkForCache, createCache } from './lib/cache';
+// import { checkForCache, createCache } from './lib/cache';
 import { APIOutput } from './types';
 
 const app = express();
@@ -88,14 +88,14 @@ app.get('/v2', async (req, res) => {
       let output: APIOutput;
 
       // optional - you'll need a supabase key if you want caching. highly recommended.
-      const cached = await checkForCache(url);
+      // const cached = await checkForCache(url);
 
-      if (cached) {
-        return res
-          .set('Access-Control-Allow-Origin', '*')
-          .status(200)
-          .json({ metadata: cached });
-      }
+      // if (cached) {
+      //   return res
+      //     .set('Access-Control-Allow-Origin', '*')
+      //     .status(200)
+      //     .json({ metadata: cached });
+      // }
 
       const metadata = await getMetadata(url);
       if (!metadata) {
@@ -126,16 +126,16 @@ app.get('/v2', async (req, res) => {
 
       sendResponse(res, output);
 
-      if (!cached && output) {
-        await createCache({
-          url,
-          title: output.title,
-          description: output.description,
-          image: output.image,
-          siteName: output.siteName,
-          hostname: output.hostname,
-        });
-      }
+      // if (!cached && output) {
+      //   await createCache({
+      //     url,
+      //     title: output.title,
+      //     description: output.description,
+      //     image: output.image,
+      //     siteName: output.siteName,
+      //     hostname: output.hostname,
+      //   });
+      // }
     }
   } catch (error) {
     console.log(error);
