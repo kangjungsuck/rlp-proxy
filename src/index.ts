@@ -6,7 +6,7 @@ import { APIOutput } from './types';
 
 const app = express();
 
-const port = Number(process.env.PORT || 8080);
+const port = Number(process.env.PORT || 3000);
 
 // if (process.env.REDISTOGO_URL) {
 //   var rtg = require('url').parse(process.env.REDISTOGO_URL);
