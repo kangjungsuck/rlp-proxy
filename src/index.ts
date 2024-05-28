@@ -1,6 +1,8 @@
 require('dotenv').config();
 import express, { Response } from 'express';
 import { getMetadata } from './lib';
+const cron = require('node-cron');
+const fetch = require('node-fetch');
 // import { checkForCache, createCache } from './lib/cache';
 import { APIOutput } from './types';
 
@@ -143,5 +145,20 @@ app.get('/v2', async (req, res) => {
       error:
         'Internal server error. Please open a Github issue or contact me on Twitter @dhaiwat10 if the issue persists.',
     });
+  }
+});
+
+// Schedule a cron job to perform a self-request every week
+cron.schedule('0 0 */7 * 0', async () => {
+  try {
+    const encodedURI = encodeURI('https://www.wikipedia.org/')
+    const response = await fetch(`https://rlp-proxy-pack.fly.dev/?url=${encodedURI}`);
+    if (response.ok) {
+      console.log('Self-request successful, server is kept active.');
+    } else {
+      console.log('Self-request failed.');
+    }
+  } catch (error) {
+    console.error('Error performing self-request:', error);
   }
 });
