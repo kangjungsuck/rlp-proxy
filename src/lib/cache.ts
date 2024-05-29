@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { APIOutput } from '../types';
+import { APIOutput } from '../types/index.js';
 
 const SUPABASE_URL = 'https://jcfywclxxplzfpgmcptl.supabase.co';
 

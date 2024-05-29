@@ -1,7 +1,15 @@
-import { MetaResult } from '../types';
-// @ts-ignore
 import axios, { AxiosRequestConfig } from 'axios';
-import parser from 'html-metadata-parser';
+import 'dotenv/config';
+import got from 'got';
+import createMetascraper from 'metascraper';
+import metascraperAuthor from 'metascraper-author';
+import metascraperDate from 'metascraper-date';
+import metascraperDescription from 'metascraper-description';
+import metascraperImage from 'metascraper-image';
+import metascraperLogo from 'metascraper-logo';
+import metascraperPublisher from 'metascraper-publisher';
+import metascraperTitle from 'metascraper-title';
+import metascraperUrl from 'metascraper-url';
 
 const TWITTER_API_URL = 'https://api.twitter.com/2';
 
@@ -18,10 +26,24 @@ const config: AxiosRequestConfig = {
   },
 };
 
-export const getMetadata = async (url: string): Promise<MetaResult | null> => {
+
+
+const metascraper = createMetascraper([
+  metascraperAuthor(),
+  metascraperDate(),
+  metascraperDescription(),
+  metascraperImage(),
+  metascraperLogo(),
+  metascraperPublisher(),
+  metascraperTitle(),
+  metascraperUrl()
+]);
+
+export const getMetadata = async (url: string): Promise<any | null> => {
   try {
-    const result = (await parser(url, config)) as MetaResult;
-    return result;
+    const { body: html, url: finalUrl } = await got(url);
+    const metadata = await metascraper({ html, url: finalUrl });
+    return metadata;
   } catch (err) {
     console.log(err);
     return null;
